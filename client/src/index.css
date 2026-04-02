@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+textarea {
+  @apply w-full border my-2 py-2 px-3 rounded-xl;
+}
+
+input[type="email"] {
+  @apply w-full border my-2 py-2 px-3 rounded-xl;
+}
+
+button {
+  @apply bg-gray-300;
+}
+
+button.primary {
+  background-color: #2563eb !important;
+  @apply p-2 w-full text-white rounded-2xl ease-out duration-300;
+}
+
+button.primary:hover {
+  background-color: #1e40af !important;
+  transition: ease-in-out 0.3s;
+}
+
+button.primary:disabled {
+  background-color: #9ca3af !important;
+  @apply cursor-not-allowed;
+}
