@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import * as api from "../../api/requester";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 import AccountNav from "../Account/AccountNav";
 import UploadPhotos from "./UploadPhotos";
 import Perks from "./Perks";

@@ -3,7 +3,7 @@ import { useLocation, Link, NavLink, useParams } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
 import { PiBuildings } from "react-icons/pi";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 
 function AccountNav() {
   const { user } = useContext(UserContext);

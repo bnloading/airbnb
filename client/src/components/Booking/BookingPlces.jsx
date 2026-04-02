@@ -9,7 +9,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import config from "../../config";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 
 const URL_TO_UPLOADS = config.UPLOADS_URL;
 
