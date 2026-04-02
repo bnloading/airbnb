@@ -7,7 +7,7 @@ import config from "../../config";
 const URL_TO_UPLOADS = config.UPLOADS_URL;
 
 import { useContext } from "react";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 
 function Places() {
   const { user, ready } = useContext(UserContext);

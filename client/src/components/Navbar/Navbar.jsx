@@ -4,7 +4,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { IoFilterSharp } from "react-icons/io5";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 
 function Navbar() {
   const { user } = useContext(UserContext);
