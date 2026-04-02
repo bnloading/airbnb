@@ -4,14 +4,14 @@ const config = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5002",
   API_PRODUCTION_URL:
     import.meta.env.VITE_API_PRODUCTION_URL ||
-    "https://airbnb-clone-64cu.onrender.com",
+    "https://airbnb-8fsk.onrender.com",
 
   // Uploads Configuration
   // NOTE: use import.meta.env.DEV which is set by Vite (true in dev mode)
   UPLOADS_URL:
     (import.meta.env.DEV
       ? `${import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5002"}`
-      : `${import.meta.env.VITE_API_PRODUCTION_URL || "https://airbnb-clone-64cu.onrender.com"}`) +
+      : `${import.meta.env.VITE_API_PRODUCTION_URL || "https://airbnb-8fsk.onrender.com"}`) +
     "/uploads/",
 
   // App Information

@@ -7,7 +7,7 @@ const defaultHotels = [
   {
     title: "Qonaq Hotel Алматы",
     address: "Алматы, Алмалы ауданы, Абай даңғылы 52",
-    photos: ["room1.png", "room2.png", "room3.png"],
+    photos: ["room1.jpg", "room2.jpg", "room3.jpg"],
     description:
       "Алматы қаласының орталығында орналасқан заманауи қонақ үй. Толық жиһазданған бөлмелер, кондиционер, room service. Метро бекетіне 5 минут жаяу жүргінші қашықтықта.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -25,7 +25,7 @@ const defaultHotels = [
   {
     title: "Grand Astana Hotel",
     address: "Астана, Есіл ауданы, Мәңгілік Ел даңғылы 28",
-    photos: ["room4.png", "room5.png", "room6.png"],
+    photos: ["room4.jpg", "room5.jpg", "room6.jpg"],
     description:
       "Астана қаласының іскер ауданында орналасқан 5 жұлдызды қонақ үй. Бәйтерек монументіне жақын. Іскер кездесулер мен отбасылық демалыс үшін қолайлы.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -43,7 +43,7 @@ const defaultHotels = [
   {
     title: "2 бөлмелі пәтер жалға",
     address: "Алматы, Бостандық ауданы, Тимирязев көшесі 42",
-    photos: ["room7.png", "room1.png", "room4.png"],
+    photos: ["room7.jpg", "room1.jpg", "room4.jpg"],
     description:
       "Алматы қаласының орталығында 2 бөлмелі жайлы пәтер. Заманауи жөндеу, толық жиһазданған. Метро, дүкендер, мейрамханалар жақын.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -61,7 +61,7 @@ const defaultHotels = [
   {
     title: "1 бөлмелі студия пәтер",
     address: "Астана, Сарыарқа ауданы, Кенесары көшесі 70",
-    photos: ["room2.png", "room5.png", "room7.png"],
+    photos: ["room2.jpg", "room5.jpg", "room7.jpg"],
     description:
       "Астана қаласында заманауи студия пәтер. Жаңа жөндеу, барлық техника бар. Іссапарға немесе студенттерге қолайлы.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -78,7 +78,7 @@ const defaultHotels = [
   {
     title: "3 бөлмелі пәтер сатылады",
     address: "Алматы, Медеу ауданы, Достық даңғылы 105",
-    photos: ["room3.png", "room6.png", "room1.png"],
+    photos: ["room3.jpg", "room6.jpg", "room1.jpg"],
     description:
       "Алматы қаласының беделді ауданында 3 бөлмелі кең пәтер сатылады. Жаңа жөндеу, 2 санвузел, балкон. Таулар көрінісі ашылады.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -95,7 +95,7 @@ const defaultHotels = [
   {
     title: "2 бөлмелі жаңа пәтер сатылады",
     address: "Астана, Есіл ауданы, Қабанбай батыр даңғылы 11",
-    photos: ["room5.png", "room3.png", "room7.png"],
+    photos: ["room5.jpg", "room3.jpg", "room7.jpg"],
     description:
       "Астана қаласының жаңа тұрғын үй кешенінде 2 бөлмелі пәтер. Жаңа құрылыс, заманауи жоспарлау. Инфрақұрылым дамыған аумақ.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -112,7 +112,7 @@ const defaultHotels = [
   {
     title: "Күнделікті жалға 1 бөлмелі пәтер",
     address: "Шымкент, Әл-Фараби ауданы, Тәуке хан даңғылы 15",
-    photos: ["room4.png", "room2.png", "room6.png"],
+    photos: ["room4.jpg", "room2.jpg", "room6.jpg"],
     description:
       "Шымкент қаласының орталығында күнделікті жалға берілетін 1 бөлмелі пәтер. Тазалық, жайлылық кепілденеді.",
     perks: ["wifi", "tv", "entrance"],
@@ -129,7 +129,7 @@ const defaultHotels = [
   {
     title: "Ақтау Resort Hotel",
     address: "Ақтау, 14-шағын аудан, Теңіз жағалауы",
-    photos: ["room6.png", "room1.png", "room5.png"],
+    photos: ["room6.jpg", "room1.jpg", "room5.jpg"],
     description:
       "Каспий теңізінің жағалауында орналасқан курорттық қонақ үй. Жеке жағажай, бассейн, SPA. Теңіз көрінісі бар бөлмелер.",
     perks: ["wifi", "parking", "tv", "entrance"],
@@ -174,6 +174,31 @@ async function seedDatabase() {
     // Check if places already exist
     const existingPlaces = await Place.countDocuments();
     if (existingPlaces > 0) {
+      // Fix photo extensions from .png to .jpg in existing data
+      const result = await Place.updateMany({ photos: { $regex: "\\.png$" } }, [
+        {
+          $set: {
+            photos: {
+              $map: {
+                input: "$photos",
+                as: "p",
+                in: {
+                  $replaceAll: {
+                    input: "$$p",
+                    find: ".png",
+                    replacement: ".jpg",
+                  },
+                },
+              },
+            },
+          },
+        },
+      ]);
+      if (result.modifiedCount > 0) {
+        console.log(
+          `Fixed photo extensions in ${result.modifiedCount} places (.png -> .jpg)`,
+        );
+      }
       console.log(
         `Database already has ${existingPlaces} places. Skipping seed.`,
       );
