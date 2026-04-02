@@ -31,31 +31,23 @@ const allowedDevOrigins = [
   "http://localhost:5178",
 ];
 
-if (process.env.NODE_ENV === "development") {
-  app.use(
-    cors({
-      credentials: true,
-      origin: (origin, callback) => {
-        // Allow requests from the Vite dev server on various ports.
-        if (!origin || allowedDevOrigins.includes(origin)) {
-          return callback(null, true);
-        }
+const allowedOrigins = [
+  "https://airbnb-tsfc.vercel.app",
+  "https://cheery-gumdrop-619967.netlify.app",
+  ...allowedDevOrigins,
+];
 
-        callback(new Error("Not allowed by CORS"));
-      },
-    }),
-  );
-} else {
-  app.use(
-    cors({
-      credentials: true,
-      origin: [
-        "https://cheery-gumdrop-619967.netlify.app",
-        "https://airbnb-tsfc.vercel.app",
-      ],
-    }),
-  );
-}
+app.use(
+  cors({
+    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
+  }),
+);
 
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING)
