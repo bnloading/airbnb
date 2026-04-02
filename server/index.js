@@ -49,7 +49,10 @@ if (process.env.NODE_ENV === "development") {
   app.use(
     cors({
       credentials: true,
-      origin: "https://cheery-gumdrop-619967.netlify.app",
+      origin: [
+        "https://cheery-gumdrop-619967.netlify.app",
+        "https://airbnb-tsfc.vercel.app",
+      ],
     }),
   );
 }
