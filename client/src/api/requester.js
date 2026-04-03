@@ -71,6 +71,7 @@ export async function uploadPhotoFromLink(data) {
   try {
     const response = await fetch(`${URL}/upload-by-link`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -87,6 +88,7 @@ export async function uploadPhotoFromDevice(data) {
   try {
     const response = await fetch(`${URL}/upload`, {
       method: "POST",
+      credentials: "include",
       body: data,
     });
 

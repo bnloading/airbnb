@@ -5,6 +5,11 @@ const parentDirectory = path.resolve(__dirname, "../../");
 const PATH_TO_UPLOADS =
   path.join(parentDirectory, "assets", "uploads") + path.sep;
 
+// Ensure uploads directory exists
+if (!fs.existsSync(PATH_TO_UPLOADS)) {
+  fs.mkdirSync(PATH_TO_UPLOADS, { recursive: true });
+}
+
 const uploadPhotoFromDevice = async (req, res, next) => {
   try {
     const uploadedFiles = [];

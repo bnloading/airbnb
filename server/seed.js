@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Place = require("./src/models/Place");
 const User = require("./src/models/User");
+const Booking = require("./src/models/Booking");
 require("dotenv").config();
 
 const defaultHotels = [
@@ -200,19 +201,64 @@ async function seedDatabase() {
         );
       }
       console.log(
-        `Database already has ${existingPlaces} places. Skipping seed.`,
+        `Database already has ${existingPlaces} places. Skipping place seed.`,
       );
-      return;
+    } else {
+      // Add places with the admin user as owner
+      for (const hotel of defaultHotels) {
+        const place = new Place({
+          ...hotel,
+          owner: adminUser._id,
+        });
+        await place.save();
+        console.log(`Added hotel: ${hotel.title}`);
+      }
     }
 
-    // Add places with the admin user as owner
-    for (const hotel of defaultHotels) {
-      const place = new Place({
-        ...hotel,
-        owner: adminUser._id,
+    // Create a test user for bookings
+    let testUser = await User.findOne({ email: "user@gmail.com" });
+    if (!testUser) {
+      const bcrypt = require("bcryptjs");
+      const hashedPassword = await bcrypt.hash("1234", 10);
+      testUser = new User({
+        name: "Арман Қасымов",
+        email: "user@gmail.com",
+        password: hashedPassword,
+        isAdmin: false,
       });
-      await place.save();
-      console.log(`Added hotel: ${hotel.title}`);
+      await testUser.save();
+      console.log("Created test user (user@gmail.com)");
+    }
+
+    // Add 2 sample bookings
+    const allPlaces = await Place.find({});
+    if (allPlaces.length >= 2) {
+      const existingBookings = await Booking.countDocuments();
+      if (existingBookings === 0) {
+        await Booking.create({
+          place: allPlaces[0]._id,
+          user: testUser._id,
+          checkIn: new Date("2026-04-10"),
+          checkOut: new Date("2026-04-15"),
+          guests: "2",
+          name: "Арман Қасымов",
+          phone: "+77001234567",
+          price: allPlaces[0].price * 5,
+        });
+        console.log(`Added booking 1: ${allPlaces[0].title}`);
+
+        await Booking.create({
+          place: allPlaces[1]._id,
+          user: testUser._id,
+          checkIn: new Date("2026-05-01"),
+          checkOut: new Date("2026-05-04"),
+          guests: "3",
+          name: "Арман Қасымов",
+          phone: "+77009876543",
+          price: allPlaces[1].price * 3,
+        });
+        console.log(`Added booking 2: ${allPlaces[1].title}`);
+      }
     }
 
     console.log("✅ Successfully seeded database with default hotels!");

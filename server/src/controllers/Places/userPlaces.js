@@ -11,12 +11,16 @@ const userPlaces = async (req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.id;
+    const isAdmin = decodedToken.isAdmin;
 
     if (!userId) {
       return res.status(401).json({ error: "User ID not found in token." });
     }
 
-    const places = await Place.find({ owner: userId });
+    // Admin sees all places, regular user sees only their own
+    const places = isAdmin
+      ? await Place.find({})
+      : await Place.find({ owner: userId });
     res.json(places);
   } catch (error) {
     next(error);
